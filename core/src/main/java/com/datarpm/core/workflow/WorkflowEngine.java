@@ -39,10 +39,6 @@ public class WorkflowEngine implements WorkflowEngineDef {
 
 	private static Logger logger = Logger.getLogger(WorkflowEngine.class);
 
-	static {
-		addShutdownHook();
-	}
-
 	private ExecutorService threadPool;
 	private final WorkflowEngineConfig config;
 	private WorkflowEventListener workflowListner;
@@ -201,15 +197,6 @@ public class WorkflowEngine implements WorkflowEngineDef {
 	private void shutdownThreadPool() {
 		if (this.threadPool != null && !this.threadPool.isShutdown())
 			threadPool.shutdown();
-	}
-
-	private static void addShutdownHook() {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				super.run();
-			}
-		});
 	}
 
 	private ExecutorService createWorkflowInstructionThreadPool() {

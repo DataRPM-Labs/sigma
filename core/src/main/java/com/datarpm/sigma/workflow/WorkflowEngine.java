@@ -235,6 +235,11 @@ public class WorkflowEngine implements WorkflowEngineDef {
 	public <R, C extends WorkflowContext<R>> C execute(WorkflowExecutionPlan<R, C> executionPlan)
 			throws WorkflowExecutionException {
 
+		WorkflowMetaInfo workflowMetaInfo = new WorkflowMetaInfo(getWorkflowId(),
+				executionPlan.getNumberOfStates());
+		Thread shutdownHookThread = new Thread(new WorkflowShutdown(workflowMetaInfo,workflowListner));
+		Runtime.getRuntime().addShutdownHook(shutdownHookThread);
+		
 		C workflowContext = executionPlan.getFactory().create();
 		try {
 			R workflowRequest = executionPlan.getRequest();
@@ -242,8 +247,6 @@ public class WorkflowEngine implements WorkflowEngineDef {
 			workflowContext.setRequest(workflowRequest);
 			workflowContext.setWorkflowSignal(new WorkflowSignalInternal());
 			threadPool = createWorkflowInstructionThreadPool();
-			WorkflowMetaInfo workflowMetaInfo = new WorkflowMetaInfo(getWorkflowId(),
-					executionPlan.getNumberOfStates());
 			workflowListner.started(workflowMetaInfo);
 			logger.info("Executing workflow ::" + workflowRequest.getClass().getName());
 
@@ -282,6 +285,7 @@ public class WorkflowEngine implements WorkflowEngineDef {
 			workflowContext.setException(extractOriginalCause(e));
 		} finally {
 			shutdownThreadPool();
+			Runtime.getRuntime().removeShutdownHook(shutdownHookThread);
 		}
 
 		return workflowContext;
@@ -414,5 +418,21 @@ public class WorkflowEngine implements WorkflowEngineDef {
 			workflowListner.onWorkflowTransitOff();
 		}
 
+	}
+
+	class WorkflowShutdown implements Runnable {
+		
+		private WorkflowEventListener workflowListener;
+		private WorkflowMetaInfo workflowMetaInfo;
+
+		public WorkflowShutdown(WorkflowMetaInfo workflowMetaInfo, WorkflowEventListener workflowListner) {
+			this.workflowMetaInfo = workflowMetaInfo;
+			this.workflowListener = workflowListner;
+		}
+
+		@Override
+		public void run() {
+			this.workflowListener.finishedWithFailure(workflowMetaInfo);
+		}
 	}
 }

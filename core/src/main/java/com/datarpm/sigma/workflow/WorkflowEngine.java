@@ -167,7 +167,7 @@ public class WorkflowEngine implements WorkflowEngineDef {
 
 		IClassBodyEvaluator evaluator = CompilerFactoryFactory.getDefaultCompilerFactory().newClassBodyEvaluator();
 		evaluator.setImplementedInterfaces(new Class[] { WorkflowCondition.class });
-		evaluator.setDefaultImports(new String[] { "datarpm.core.workflow.*" });
+		evaluator.setDefaultImports(new String[] { "com.datarpm.sigma.workflow.*" });
 		evaluator.setParentClassLoader(WorkflowEngine.class.getClassLoader());
 		Reader reader = new StringReader(classBody.toString());
 		return (WorkflowCondition) evaluator.createInstance(reader);

@@ -16,7 +16,7 @@ public class TestAnnotationWorkflow extends TestCase {
   }
 
   @Test
-  public void testConditionalWorkflowExecution() throws Exception {
+  public void testWorkflowExecution() throws Exception {
     SimpleWorkflowRequest workflowRequest = new SimpleWorkflowRequest();
     WorkflowEngineConfig conf = new WorkflowEngineConfig();
     conf.setWorkerThreadCount(2);

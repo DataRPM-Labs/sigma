@@ -114,6 +114,16 @@ public class WorkflowEngine implements WorkflowEngineDef {
 						builder.executeState(workflowState);
 					}
 				}
+				
+				States concurrent = flow.concurrent();
+				if (concurrent != null) {
+				  List<WorkflowState> states = new ArrayList<>();
+				  for (Class<? extends WorkflowState> state : concurrent.names()) {
+            WorkflowState workflowState = state.newInstance();
+            states.add(workflowState);
+          }
+          builder.executeConcurrent(states.toArray(new WorkflowState[states.size()]));
+        }
 			}
 		}
 		return builder.getPlan();

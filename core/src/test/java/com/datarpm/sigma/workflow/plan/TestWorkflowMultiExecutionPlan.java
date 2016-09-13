@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import com.datarpm.sigma.workflow.WorkflowContextFactory;
 import com.datarpm.sigma.workflow.WorkflowEngine;
+import com.datarpm.sigma.workflow.WorkflowEngineConfig;
 import com.datarpm.sigma.workflow.WorkflowExecutionPlan;
 import com.datarpm.sigma.workflow.WorkflowState;
 import com.datarpm.sigma.workflow.WorkflowStateException;
@@ -66,7 +67,9 @@ public class TestWorkflowMultiExecutionPlan extends TestCase {
 						new ConcurrentState("T2"))
 				.executeState(new NextState());
 
-		SimpleWorkflowContext workflowContext = new WorkflowEngine()
+		WorkflowEngineConfig config = new WorkflowEngineConfig();
+		config.setWorkerThreadCount(2);
+    SimpleWorkflowContext workflowContext = new WorkflowEngine(config)
 				.execute(builder.getPlan());
 
 		assertEquals(workflowContext.isFailed(), FALSE);

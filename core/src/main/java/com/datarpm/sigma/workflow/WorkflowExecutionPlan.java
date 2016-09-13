@@ -51,7 +51,7 @@ public class WorkflowExecutionPlan<R, C extends WorkflowContext<R>> {
   }
 
   static enum TYPE {
-    STATE_EXECUTION
+    STATE_EXECUTION, CONCURRENT_STATE_EXECUTION
   };
 
   static class ExecutionFlow {
@@ -203,10 +203,14 @@ public class WorkflowExecutionPlan<R, C extends WorkflowContext<R>> {
 
     @SuppressWarnings("unchecked")
     public Builder<R, C> executeConditional(WorkflowCondition condition, WorkflowState<R, C>... states) {
-      Instruction e = new Instruction(TYPE.STATE_EXECUTION);
-      e.addStates(states);
-
-      ExecutionFlow executionFlow = new ExecutionFlow(condition, e);
+      List<Instruction> instructions = new ArrayList<>();
+      for (WorkflowState<R, C> workflowState : states) {
+        Instruction e = new Instruction(TYPE.STATE_EXECUTION);
+        e.addStates(workflowState);
+        instructions.add(e);
+      }
+      
+      ExecutionFlow executionFlow = new ExecutionFlow(condition, instructions);
       executionPlan.add(executionFlow);
       numberOfStates += states.length;
       return this;

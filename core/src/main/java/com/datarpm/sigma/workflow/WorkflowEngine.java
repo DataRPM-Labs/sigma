@@ -114,16 +114,16 @@ public class WorkflowEngine implements WorkflowEngineDef {
 						builder.executeState(workflowState);
 					}
 				}
-				
+
 				States concurrent = flow.concurrent();
 				if (concurrent != null) {
-				  List<WorkflowState> states = new ArrayList<>();
-				  for (Class<? extends WorkflowState> state : concurrent.names()) {
-            WorkflowState workflowState = state.newInstance();
-            states.add(workflowState);
-          }
-          builder.executeConcurrent(states.toArray(new WorkflowState[states.size()]));
-        }
+					List<WorkflowState> states = new ArrayList<>();
+					for (Class<? extends WorkflowState> state : concurrent.names()) {
+						WorkflowState workflowState = state.newInstance();
+						states.add(workflowState);
+					}
+					builder.executeConcurrent(states.toArray(new WorkflowState[states.size()]));
+				}
 			}
 		}
 		return builder.getPlan();
@@ -245,11 +245,10 @@ public class WorkflowEngine implements WorkflowEngineDef {
 	public <R, C extends WorkflowContext<R>> C execute(WorkflowExecutionPlan<R, C> executionPlan)
 			throws WorkflowExecutionException {
 
-		WorkflowMetaInfo workflowMetaInfo = new WorkflowMetaInfo(getWorkflowId(),
-				executionPlan.getNumberOfStates());
-		Thread shutdownHookThread = new Thread(new WorkflowShutdown(workflowMetaInfo,workflowListner));
+		WorkflowMetaInfo workflowMetaInfo = new WorkflowMetaInfo(getWorkflowId(), executionPlan.getNumberOfStates());
+		Thread shutdownHookThread = new Thread(new WorkflowShutdown(workflowMetaInfo, workflowListner));
 		Runtime.getRuntime().addShutdownHook(shutdownHookThread);
-		
+
 		C workflowContext = executionPlan.getFactory().create();
 		try {
 			R workflowRequest = executionPlan.getRequest();
@@ -260,6 +259,7 @@ public class WorkflowEngine implements WorkflowEngineDef {
 			workflowListner.started(workflowMetaInfo);
 			logger.info("Executing workflow ::" + workflowRequest.getClass().getName());
 
+			EXIT_WORKFLOW:
 			for (ExecutionFlow eachFlow : executionPlan.getExecutionPlan()) {
 				WorkflowCondition condition = eachFlow.getCondition();
 				if (condition.evaluate(workflowContext, workflowRequest)) {
@@ -272,11 +272,12 @@ public class WorkflowEngine implements WorkflowEngineDef {
 						default:
 							break;
 						}
+						
+						if (workflowContext.isExitWorkflow()) {
+						  logger.info("Workflow execution exit has been triggered from state: " + eachFlow.getIntructions());
+		          break EXIT_WORKFLOW;
+		        }
 					}
-				}
-				if (workflowContext.isExitWorkflow()) {
-					logger.info("Workflow execution exit has been triggered from state: " + eachFlow.getIntructions());
-					break;
 				}
 			}
 
@@ -431,7 +432,7 @@ public class WorkflowEngine implements WorkflowEngineDef {
 	}
 
 	class WorkflowShutdown implements Runnable {
-		
+
 		private WorkflowEventListener workflowListener;
 		private WorkflowMetaInfo workflowMetaInfo;
 

@@ -22,7 +22,7 @@ Using Maven:
 ```
 
 ### Requirements
-You need to have a recent version of Java installed.
+You need to have a 1.6+ version of Java installed.
 
 ### Simple Annotation Flow
 
@@ -37,8 +37,6 @@ WorkflowEngineConfig config = new WorkflowEngineConfig();
 config.setWorkerThreadCount(NUMBER_OF_THREADS);
 WorkflowEngine engine = new WorkflowEngine(config);
 ```
-
-### Where to go from here ?
 
 ### Building from source
 

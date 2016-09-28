@@ -36,6 +36,8 @@ You need to have a recent version of Java installed.
 
 ### Building from source
 
+simply run script ```./sbuild/build.sh``` in cloned directory
+
 ### License
 ```
 This software is licensed under the Apache License, version 2 ("ALv2"), quoted below.

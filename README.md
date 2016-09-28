@@ -22,7 +22,7 @@ Using Maven:
 ```
 
 ### Requirements
-You need to have a 1.6+ version of Java installed.
+You need to have 1.6+ version of Java installed.
 
 ### Simple Annotation Flow
 

@@ -30,7 +30,13 @@ You need to have a recent version of Java installed.
 
 ### Dynamic Workflow Plan
 
-### Configuration
+### Control Concurrency
+
+```
+WorkflowEngineConfig config = new WorkflowEngineConfig();
+config.setWorkerThreadCount(NUMBER_OF_THREADS);
+WorkflowEngine engine = new WorkflowEngine(config);
+```
 
 ### Where to go from here ?
 

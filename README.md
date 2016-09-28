@@ -134,7 +134,7 @@ config.setWorkerThreadCount(NUMBER_OF_THREADS);
 WorkflowEngine engine = new WorkflowEngine(config);
 ```
 ### Where to go from here ?
-For other features :
+Refer the book for features like :
 
 1. Concurrent state execution
 2. Skip on failure
@@ -142,7 +142,7 @@ For other features :
 4. Workflow state listener
 5. Workflow listener
 
-and many more, please refer to this book
+and many more
 
 We are also available on Google Group for further discussions and support
 

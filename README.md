@@ -79,8 +79,52 @@ public class ExecuteSQLQuery implements WorkflowState<DatabaseQueryRequest, Data
 ```
 
 ### Conditional Annotation Flow
-
+Following example connects to database, executes query and exports result to csv based on condition
+```java
+@WorkflowRequest
+@Flows(flows = {
+        @Flow(simple = @States(names = { 
+                        InitializeConnection.class, 
+                        PrepareSQLQuery.class,
+                        ExecuteSQLQuery.class 
+                        })
+        ),
+        @Flow(
+            conditional = {
+                    @ConditionalFlow( exp = "request.isExportResultToCsv()", 
+                                    states = { ExportResultSetToCSV.class }
+                    ) 
+            }
+        ) 
+})
+@Context(name = DatabaseQueryContext.class)
+public class DatabaseQueryRequest {
+  private String connectionURL;
+  private String userName;
+  private String password;
+  private boolean exportResultToCsv;
+}
+```
 ### Dynamic Workflow Plan
+To execute dynamic workflows use `WorkflowExecutionPlan.Builder`
+```java
+DatabaseQueryRequest request = new DatabaseQueryRequest("--url--", "--username--", "--password--");
+Builder<DatabaseQueryRequest, DatabaseQueryContext> builder = null;
+
+WorkflowContextFactory contextFactory = new WorkflowContextFactory<DatabaseQueryRequest, DatabaseQueryContext>() {
+
+      @Override
+      public DatabaseQueryContext create() {
+        return new DatabaseQueryContext();
+      }
+    };
+
+builder = new WorkflowExecutionPlan.Builder<DatabaseQueryRequest, DatabaseQueryContext>(request, contextFactory);
+builder.executeState(new InitializeConnection());
+builder.executeState(new PrepareSQLQuery());
+builder.executeState(new ExecuteSQLQuery());
+DatabaseQueryContext context = new WorkflowEngine().executePlan(builder.getPlan());
+```
 
 ### Control Concurrency
 

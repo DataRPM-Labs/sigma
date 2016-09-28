@@ -26,13 +26,13 @@ You need to have 1.6+ version of Java installed.
 
 ### Simple Annotation Flow
 Following example connects to database and executes query
-```
+```java
 DatabaseQueryRequest request = DatabaseQueryRequest(connectionURL, userName, password);
 DatabaseQueryContext context = new WorkflowEngine().execute(request);
 ResultSet resultset = context.getResultSet();
 ```
 ###### Workflow Request
-```
+```java
 @WorkflowRequest
 @States(names = { InitializeConnection.class, PrepareSQLQuery.class, ExecuteSQLQuery.class })
 @Context(name = DatabaseQueryContext.class)
@@ -44,7 +44,7 @@ public class DatabaseQueryRequest {
 }
 ```
 ###### Workflow Context
-```
+```java
 public class DatabaseQueryContext extends WorkflowContext<DatabaseQueryRequest> {
   private Connection connection;
   private String sqlQuery;
@@ -52,7 +52,7 @@ public class DatabaseQueryContext extends WorkflowContext<DatabaseQueryRequest> 
 }
 ```
 ###### Workflow State
-```
+```java
 public class InitializeConnection implements WorkflowState<DatabaseQueryRequest, DatabaseQueryContext> {
   
   public void execute(DatabaseQueryContext context) throws WorkflowStateException {
@@ -66,7 +66,7 @@ public class InitializeConnection implements WorkflowState<DatabaseQueryRequest,
   }
 }
 ```
-```
+```java
 public class ExecuteSQLQuery implements WorkflowState<DatabaseQueryRequest, DatabaseQueryContext> {
   
   public void execute(DatabaseQueryContext context) throws WorkflowStateException {
@@ -84,11 +84,14 @@ public class ExecuteSQLQuery implements WorkflowState<DatabaseQueryRequest, Data
 
 ### Control Concurrency
 
-```
+```java
 WorkflowEngineConfig config = new WorkflowEngineConfig();
 config.setWorkerThreadCount(NUMBER_OF_THREADS);
 WorkflowEngine engine = new WorkflowEngine(config);
 ```
+### Where to go from here ?
+Google group
+Book
 
 ### Building from source
 

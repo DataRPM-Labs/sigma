@@ -26,6 +26,11 @@ You need to have 1.6+ version of Java installed.
 
 ### Simple Annotation Flow
 Following example connects to database and executes query
+```
+DatabaseQueryRequest request = DatabaseQueryRequest(connectionURL, userName, password);
+DatabaseQueryContext context = new WorkflowEngine().execute(request);
+ResultSet resultset = context.getResultSet();
+```
 ###### Workflow Request
 ```
 @WorkflowRequest

@@ -1,4 +1,4 @@
-# DataRPM μFlow
+# DataRPM Sigma
 ### The Micro Workflow for Java Developers
 
 Key Features:

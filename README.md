@@ -25,6 +25,53 @@ Using Maven:
 You need to have 1.6+ version of Java installed.
 
 ### Simple Annotation Flow
+Following example connects to database and executes query
+###### Workflow Request
+```
+@WorkflowRequest
+@States(names = { InitializeConnection.class, PrepareSQLQuery.class, ExecuteSQLQuery.class })
+@Context(name = DatabaseQueryContext.class)
+public class DatabaseQueryRequest {
+  private String connectionURL;
+  private String userName;
+  private String password;
+  // declare input variables
+}
+```
+###### Workflow Context
+```
+public class DatabaseQueryContext extends WorkflowContext<DatabaseQueryRequest> {
+  private Connection connection;
+  private String sqlQuery;
+  private ResultSet resultSet;
+}
+```
+###### Workflow State
+```
+public class InitializeConnection implements WorkflowState<DatabaseQueryRequest, DatabaseQueryContext> {
+  
+  public void execute(DatabaseQueryContext context) throws WorkflowStateException {
+    // Reference to workflow request
+    DatabaseQueryRequest request = context.getRequest();
+    String userName = request.getUserName();
+    String password = request.getPassword();
+    Connection jdbcConnection = // initialize connection
+    // Set Connection object to context
+    context.setConnection(jdbcConnection);
+  }
+}
+```
+```
+public class ExecuteSQLQuery implements WorkflowState<DatabaseQueryRequest, DatabaseQueryContext> {
+  
+  public void execute(DatabaseQueryContext context) throws WorkflowStateException {
+    // Reference to connection object set from InitializeConnection state 
+    Connection jdbcConnection = context.getConnection();
+    ResultSet rs = jdbcConnection.executeQuery("-- some query --");
+    context.setResultSet(rs)
+  }
+}
+```
 
 ### Conditional Annotation Flow
 

@@ -16,7 +16,7 @@ Using Maven:
 ```
 <dependency>
     <groupId>com.datarpm.sigma</groupId>
-    <artifactId>datarpm-sigma-core</artifactId>
+    <artifactId>datarpm-sigma-workflow</artifactId>
     <version>1.0</version>
 </dependency>
 ```

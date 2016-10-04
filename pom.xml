@@ -138,7 +138,16 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>withExamples</id>
+			<modules>
+				<module>workflow</module>
+				<module>examples</module>
+			</modules>
+		</profile>
+	</profiles>
+	<url>https://github.com/DataRPM-Labs/sigma</url>
 	<name>DataRPM Sigma</name>
-	<description>DataRPM Sigma
-The Micro Workflow for Java Developers</description>
+	<description>SIGMA - The Micro Workflow for Java Developers</description>
 </project>

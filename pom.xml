@@ -26,7 +26,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -40,4 +40,14 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>withExamples</id>
+			<modules>
+				<module>workflow</module>
+				<module>examples</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

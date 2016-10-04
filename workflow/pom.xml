@@ -44,6 +44,4 @@
 			<version>${janino.version}</version>
 		</dependency>
 	</dependencies>
-	<description>DataRPM Sigma
-The Micro Workflow for Java Developers</description>
 </project>

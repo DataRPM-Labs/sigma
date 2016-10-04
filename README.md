@@ -144,7 +144,7 @@ Refer book for features like :
 
 and many more
 
-We are also available on Google Group for further discussions and support
+We are also available on Google Group (https://groups.google.com/forum/#!forum/sigma-rpm) for further discussions and support
 
 ### Building from source
 
